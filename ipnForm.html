@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Dummy IPN Sender</title>
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+ <div class="container pt-5">
+  <h1>Send me a fake IPN</h1>
+  <form target="_new" method="post" action="http://127.0.0.1:5000/paypal/ipn">
+    <input type="hidden" name="payer_email" value="example@test.com"/>
+    <input type="hidden" name="first_name" value="SummerMan"/>
+    <input type="hidden" name="last_name" value="Hat-Stanley"/>
+    <input type="hidden" name="test_ipn" value="true"/>
+    <!--
+        TODO note="Ask Jess what we should do for people who payed too little?
+    --> 
+    <input type="hidden" name="payment_gross" value="11.11"/>
+    <input type="hidden" name="transaction_subject" value="Book"/>  
+    <input type="submit"/>
+  </form>
+ </div>
+</body>
+</html>
