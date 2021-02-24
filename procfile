@@ -1,1 +1,1 @@
-web: gunicorn paypalNotificationHandler:flaskInstance
+web: gunicorn paypalNotificationHandler:flaskInstance 
