@@ -1,4 +1,5 @@
-import urllib 
+import urllib
+import sys
 # TODO: Use eventlet, http://eventlet.net/doc/examples.html
 # Also, use pypy when running
 
@@ -30,6 +31,7 @@ def verify_IPN_with_paypal(ipn_data: str) -> bool:
 
 def handle_authentic_IPN(ipn_request):
     print("We got an IPN!", ipn_request.form)
+    sys.stdout.flush()
 
 @flaskInstance.route('/paypal/ipn', methods=['POST'])
 def handleIPN():
@@ -39,6 +41,7 @@ def handleIPN():
         ipn_authentic = verify_IPN_with_paypal(request.data)
     except:
         print("paypalNotificationHander:paypal:40 - failed to get a response from paypal")
+        sys.stdout.flush()
         return "Could not communicate with paypal to verify that message", 403
 
     if ipn_authentic:
@@ -46,4 +49,5 @@ def handleIPN():
         return "Joyous times human, IPN message validated by PayPal", 200
     else:
         print("paypalNotificationHander:paypal:40 - got an invalid response from paypal")
+        sys.stdout.flush()
         return "Paypal said your message wasn't from them, stranger thing...", 403
