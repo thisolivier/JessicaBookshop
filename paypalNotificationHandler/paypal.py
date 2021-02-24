@@ -25,6 +25,7 @@ def verify_IPN_with_paypal(ipn_data: str) -> bool:
     elif response == 'VERIFIED':
         return True
     else:
+        print("The reponse body was", responseBody)
         raise Exception('Reponse cannot be decoded')
 
 def handle_authentic_IPN(ipn_request):
@@ -37,6 +38,7 @@ def handleIPN():
     try:
         ipn_authentic = verify_IPN_with_paypal(request.data)
     except:
+        print("paypalNotificationHander:paypal:40 - failed to get a response from paypal")
         return "Could not communicate with paypal to verify that message", 403
 
     if ipn_authentic:
