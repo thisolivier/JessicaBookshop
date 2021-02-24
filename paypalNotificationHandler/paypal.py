@@ -18,7 +18,10 @@ PAYPAL_URL = PAYPAL_LIVE_URL if flaskInstance.config['PAYPAL_LIVE'] else PAYPAL_
 # adds verification string and asks paypal if it sent us this message
 # checks response for valid or invalid state (note, blocking)
 def verify_IPN_with_paypal(ipn_data: str) -> bool:
+    # NEXT TODO: Fix this logic, it's bust
+    # - what the fuck is that request.data
     verification_string = 'cmd=_notify-validate&%s' % ipn_data
+    print("verification string...", verification_string)
     response = urllib.request.urlopen(PAYPAL_URL, data=verification_string.encode())
     responseBody = response.read().decode('utf-8')
     if responseBody == 'INVALID':
@@ -37,6 +40,9 @@ def handle_authentic_IPN(ipn_request):
 def handleIPN():
 
     ipn_authentic = False
+    print("data", request.data)
+    print("form", request.form)
+    print("args", request.args)
     try:
         ipn_authentic = verify_IPN_with_paypal(request.data)
     except:
