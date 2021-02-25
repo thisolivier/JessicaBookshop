@@ -3,16 +3,9 @@ import sys
 # TODO: Use eventlet, http://eventlet.net/doc/examples.html
 # Also, use pypy when running
 
+import facts
+
 from flask import request
-
-from paypalNotificationHandler import flaskInstance
-
-flaskInstance.config['PAYPAL_LIVE'] = False
-
-PAYPAL_LIVE_URL = 'https://ipnpb.paypal.com/cgi-bin/webscr'
-PAYPAL_SANDBOX_URL = 'https://ipnpb.sandbox.paypal.com/cgi-bin/webscr'
-
-PAYPAL_URL = PAYPAL_LIVE_URL if flaskInstance.config['PAYPAL_LIVE'] else PAYPAL_SANDBOX_URL
 
 # helper function to verify ipn message
 # adds verification string and asks paypal if it sent us this message
@@ -23,7 +16,7 @@ def verify_IPN_with_paypal(ipn_data: str) -> bool:
     # - what the fuck is that request.data
     verification_string = 'cmd=_notify-validate&%s' % ipn_data
     print("verification string...", verification_string)
-    response = urllib.request.urlopen(PAYPAL_URL, data=verification_string.encode())
+    response = urllib.request.urlopen(facts.PAYPAL_URL, data=verification_string.encode())
     responseBody = response.read().decode('utf-8')
     if responseBody == 'INVALID':
         return False
@@ -37,9 +30,8 @@ def handle_authentic_IPN(ipn_request):
     print("We got an IPN!", ipn_request.form)
     sys.stdout.flush()
 
-@flaskInstance.route('/paypal/ipn', methods=['POST'])
-def handleIPN():
-
+def receive_IPN_request(request):
+    
     ipn_authentic = False
     try:
         ipn_authentic = verify_IPN_with_paypal(request.get_data(True, True))
