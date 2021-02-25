@@ -27,7 +27,7 @@ def verify_IPN_with_paypal(ipn_data: str) -> bool:
     responseBody = response.read().decode('utf-8')
     if responseBody == 'INVALID':
         return False
-    elif response == 'VERIFIED':
+    elif responseBody == 'VERIFIED':
         return True
     else:
         print("The reponse body was", responseBody)
