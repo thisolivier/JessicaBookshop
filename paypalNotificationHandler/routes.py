@@ -1,5 +1,5 @@
 import paypalNotificationHandler.interface.flaskIsRunning as flaskIsRunning
-import paypalNotificationHandler.paypal.paypal as paypal
+import paypalNotificationHandler.paypal as paypal
 
 from flask import request
 
