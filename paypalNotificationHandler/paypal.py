@@ -17,6 +17,7 @@ PAYPAL_URL = PAYPAL_LIVE_URL if flaskInstance.config['PAYPAL_LIVE'] else PAYPAL_
 # helper function to verify ipn message
 # adds verification string and asks paypal if it sent us this message
 # checks response for valid or invalid state (note, blocking)
+# INPUT 1 - inp_data: ImmutableMultiDict 
 def verify_IPN_with_paypal(ipn_data: str) -> bool:
     # NEXT TODO: Fix this logic, it's bust
     # - what the fuck is that request.data
@@ -40,11 +41,8 @@ def handle_authentic_IPN(ipn_request):
 def handleIPN():
 
     ipn_authentic = False
-    print("data", request.data)
-    print("form", request.form)
-    print("args", request.args)
     try:
-        ipn_authentic = verify_IPN_with_paypal(request.data)
+        ipn_authentic = verify_IPN_with_paypal(request.get_data(True, True))
     except:
         print("paypalNotificationHander:paypal:40 - failed to get a response from paypal")
         sys.stdout.flush()
